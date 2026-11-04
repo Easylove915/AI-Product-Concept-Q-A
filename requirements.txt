@@ -1,0 +1,12 @@
+# 核心链路零依赖，Python 3.10+ 标准库即可运行，无需安装本文件。
+#
+# 下面都是「可选增强」，按需单独安装：
+#
+#   pip install fastapi uvicorn          # 把 Web 层换成生产级 ASGI 服务
+#   pip install chromadb                 # 持久化向量库，替代内置 JSON 索引
+#   pip install sentence-transformers    # 本地 embedding 模型（DENSE_MODE=local）
+#   pip install rank_bm25 jieba          # 更专业的 BM25 与中文分词
+#   pip install pypdf                    # 扩展接入层以支持 PDF 文档
+#   pip install rerankers                # 加一层 cross-encoder 重排序
+#
+# 建议顺序：先跑通零依赖版本 → 接 LLM → 接真实 GitHub 文档 → 再换组件。

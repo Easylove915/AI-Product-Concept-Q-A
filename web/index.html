@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAG 知识库答疑系统 · Demo</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v16H6.5A2.5 2.5 0 0 0 4 21.5z"/>
+          <path d="M4 19V5.5"/><path d="M9 8h6M9 12h6M9 16h3"/>
+        </svg>
+      </div>
+      <div>
+        <h1>知识库答疑系统 <span class="tag">RAG Demo</span></h1>
+        <p>检索增强生成 · 答案可溯源</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="badge" id="modeBadge">读取中…</span>
+      <span class="badge badge-ghost" id="indexBadge">索引加载中</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- ------------------------------ 左侧 ------------------------------ -->
+    <aside class="sidebar">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>知识库</h2>
+          <div class="head-actions">
+            <span class="dot" id="sourceDot"></span>
+            <button class="icon-btn" id="syncBtn" title="重新读取文档并重建索引">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="stat-grid">
+          <div><span id="statDocs">—</span><small>文档</small></div>
+          <div><span id="statChunks">—</span><small>片段</small></div>
+        </div>
+        <p class="source-line" id="sourceLine">来源读取中…</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><h2>试试这些问题</h2></div>
+        <div class="chips" id="samples"></div>
+      </section>
+    </aside>
+
+    <!-- ------------------------------ 主区 ------------------------------ -->
+    <main class="main">
+      <div class="askbox">
+        <div class="askbox-label">
+          <span>向知识库提问</span>
+          <span class="kbd">Enter 发送 · Shift+Enter 换行</span>
+        </div>
+        <textarea id="query" rows="2" placeholder="例如：这个系统的限流策略是什么？"></textarea>
+        <div class="askbox-foot">
+          <span class="hint" id="askHint">答案中的每个 [编号] 都可点击回溯到原文</span>
+          <button class="btn btn-accent" id="askBtn">生成答案 <span>→</span></button>
+        </div>
+      </div>
+
+      <div class="answer-card hidden" id="answerCard">
+        <div class="answer-head">
+          <div class="answer-title">
+            <span class="icon-check">✓</span> 答案
+            <span class="badge badge-soft" id="answerMode"></span>
+          </div>
+          <div class="answer-meta" id="answerMeta"></div>
+        </div>
+        <div class="answer-body" id="answerBody"></div>
+        <div class="warnings" id="warnings"></div>
+      </div>
+
+      <div class="section hidden" id="citationSection">
+        <div class="section-head">
+          <h2>引用溯源 <span class="counter" id="citeCount">0</span></h2>
+          <p>点击卡片展开原文片段；文档源为 GitHub 仓库时可跳转到对应行</p>
+        </div>
+        <div class="cite-grid" id="citeGrid"></div>
+      </div>
+
+      <div class="section hidden" id="hitSection">
+        <div class="section-head">
+          <h2>检索过程 <span class="counter" id="hitCount">0</span></h2>
+          <p>BM25 + TF-IDF 余弦 + 稠密向量，经 RRF 融合排序</p>
+        </div>
+        <div class="table-wrap">
+          <table class="hit-table">
+            <thead><tr><th>#</th><th>文档 / 章节</th><th>相关度</th><th>BM25</th><th>TF-IDF</th><th>Dense</th><th>原文</th></tr></thead>
+            <tbody id="hitBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <details class="section debug" id="contextSection" hidden>
+        <summary>查看送入大模型的 Prompt 上下文</summary>
+        <pre id="contextBody"></pre>
+      </details>
+
+      <div class="empty" id="empty">
+        <div class="empty-art">
+          <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="14" y="12" width="46" height="60" rx="5"/>
+            <path d="M24 28h26M24 38h26M24 48h17"/>
+            <rect x="66" y="26" width="40" height="46" rx="5" opacity=".55"/>
+            <path d="M76 42h20M76 52h14"/>
+            <circle cx="60" cy="45" r="9" fill="var(--bg)" opacity=".9"/>
+            <path d="M56 45h8M60 41v8"/>
+          </svg>
+        </div>
+        <h3>从一次提问开始</h3>
+        <p>系统会把问题拆成检索词，召回最相关的文档片段，<br>再让大模型基于这些片段作答，并逐条标注出处。</p>
+        <div class="pipeline">
+          <span>文档接入</span><i>→</i><span>分块</span><i>→</i><span>混合检索</span><i>→</i><span>答案生成</span><i>→</i><span>引用溯源</span>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="/app.js"></script>
+</body>
+</html>

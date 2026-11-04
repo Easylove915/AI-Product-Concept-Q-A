@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    name: smoke (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # 核心链路零依赖，所以这里不需要 pip install
+      - name: 语法检查
+        run: python -m compileall -q app.py config.py rag scripts eval
+
+      - name: 冒烟测试（无 Key / 不联网 / 临时索引）
+        run: python scripts/smoke_test.py

@@ -1,0 +1,3 @@
+﻿id,type,query,gold,expect_reject,note
+S01,direct,网关的默认限流阈值是多少？,限流与配额,0,示例题：直接用文档术语提问 gold 填目标文档标题
+S02,reject,今天股票行情怎么样？,,1,示例题：域外问题期望拒答 gold 留空

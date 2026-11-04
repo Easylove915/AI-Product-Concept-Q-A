@@ -1,0 +1,31 @@
+﻿id,type,query,gold,expect_reject,note
+A01,direct,Agent 五要素是哪五个？,Agent五要素技术定义,0,直问概念清单 对应「五要素总览」节
+A02,direct,RAG 主要解决哪三类核心问题？,RAG,0,直问 对应「RAG 解决的三类核心问题」
+A03,direct,MCP 的三层架构分别是什么？,Function Calling与MCP,0,直问 对应「MCP 三层架构」
+A04,direct,Agent 的记忆分哪四类？,Agent记忆体系,0,直问 对应「四类记忆全景」
+A05,direct,Planning 有哪三大范式？,Agent规划与反思,0,直问 对应「三大 Planning 范式」
+A06,direct,提示词设计的五要素是什么？,提示词设计五要素,0,直问 对应「五要素总览」
+A07,direct,RAG 的文本分块有哪六大策略？,RAG数据清洗与文本分割,0,直问 对应「6 大分块策略」
+A08,direct,向量索引有哪五种常用类型？,RAG向量化与索引,0,直问 对应「5 种常用索引类型」
+A09,direct,竞品分析五步法的具体步骤是什么？,竞品分析五步法,0,直问 对应「步骤总览」
+A10,direct,灰度发布的黄金比例节奏是什么？,灰度发布,0,直问 对应「黄金比例节奏」
+B01,paraphrase,一个智能体到底要配齐哪些零件才算完整？,Agent五要素技术定义,0,换说法 用「零件」替代「五要素」 考语义召回
+B02,paraphrase,模型怎么自己去调外部接口把事干完？,Function Calling与MCP,0,换说法 避开 Function Calling 与 工具调用 术语
+B03,paraphrase,知识库切片的长度和重叠该定多少？,RAG数据清洗与文本分割,0,换说法 用「切片」替代「分块/文本分割」
+B04,paraphrase,怎么判断一套系统是真智能体还是一条固定流程？,Agent vs Workflow,0,换说法 用「固定流程」替代「Workflow」
+B05,paraphrase,新版本先放一小部分用户看数据、再逐步全量的做法叫什么？,灰度发布,0,换说法 用「放量/全量」替代「灰度发布」
+B06,paraphrase,模型老答错的那批 case 应该怎么定位根因？,Badcase分析方法论,0,换说法 用「答错/定位根因」替代「Badcase/归因」
+B07,paraphrase,用户提问太口语、跟文档用词对不上时 检索前要先做什么？,Query增强与改写,0,换说法 用「口语/对不上」替代「Query 改写」
+B08,paraphrase,让模型少给几个例子就能学会新任务 这属于哪种提示方法？,Few-Shot少样本提示,0,换说法 用「给几个例子」替代「Few-Shot」
+C01,multi,POC 和 MVP 有什么区别？,POC验证|MVP验证,0,跨文档对比 需要两篇才对得上
+C02,multi,Agent 和 Workflow 该怎么选？,Agent vs Workflow|AI产品关键决策速查,0,跨文档 判据在决策速查篇
+C03,multi,Multi-Agent 和 Workflow 里的 Orchestrator-Workers 是什么关系？,Multi-Agent协作|Agent vs Workflow,0,跨文档 两篇各讲一半
+C04,multi,RAG、微调、长上下文三种给模型补知识的方式怎么选？,AI产品关键决策速查|RAG,0,跨文档 决策口径与原理分离
+C05,multi,RAG 的完整运转流程分几个阶段 离线和在线各管什么？,RAG运转流程|RAG检索-组装-生成,0,跨文档 总览与细分各一篇
+C06,multi,大模型预训练和后训练分别解决什么问题？,大模型预训练|大模型后训练,0,跨文档 一篇讲一个阶段
+D01,reject,公司年假怎么申请？,,1,域外 企业行政制度
+D02,reject,红烧肉要炖多久？,,1,域外 生活常识 最基础的负样本
+D03,reject,明天郑州天气怎么样？,,1,域外 实时信息 考单字污染
+D04,reject,Python 的 GIL 是什么？,,1,邻近域 技术相关但语料没有 最容易误放行
+D05,reject,帮我写一个快速排序的 Python 实现,,1,邻近域 生成任务而非问答 考是否偷偷使用先验知识
+D06,reject,Kubernetes 的 Pod 调度策略有哪些？,,1,邻近域 云原生话题 语料未覆盖

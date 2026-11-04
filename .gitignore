@@ -1,0 +1,41 @@
+# ===== 密钥与本地配置（务必不要提交）=====
+.env
+.env.*
+!.env.example
+*.key
+
+# ===== 运行时产物 =====
+*.log
+feedback.jsonl
+
+# ===== 评测产物 =====
+# 题库 eval/testset.csv 随仓库发布，任何人都能复现同一套分数。
+# 逐题报告里带着语料原文片段，不发布；只保留归档索引这一份纯指标表。
+eval/results/*
+!eval/results/archive
+eval/results/archive/*
+!eval/results/archive/README.md
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ===== 生成的索引（可由 DOCS_DIR / GITHUB_REPO 重新构建）=====
+data/index/*.json
+
+# ===== 编辑器 / 系统 =====
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
