@@ -16,7 +16,7 @@ python eval/run_eval.py --only D        # 只跑某一类题（D=域外拒答）
 
 结果写到 `eval/results/`，同时生成 Markdown 报告和 JSON 明细。
 每次运行的快照会自动归档到 `eval/results/archive/`，那里有一份
-[迭代时间线](results/archive/README.md)，记录**每次运行对应哪次改动**。
+[迭代时间线](../eval/results/archive/README.md)，记录**每次运行对应哪次改动**。
 
 ## 评测集设计
 
